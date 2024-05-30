@@ -47,7 +47,7 @@ io.on("connection", async (socket) => {
 
     const payload = {
       _id: userDetails?._id,
-      name: userDetails?.name,
+      username: userDetails?.username,
       email: userDetails?.email,
       profile_pic: userDetails?.profile_pic,
       online: onlineUser.has(userId),

@@ -5,6 +5,7 @@ const connectDB = require("./config/connectDB");
 const router = require("./routes/index");
 const cookiesParser = require("cookie-parser");
 const { app, server } = require("./socket/index");
+const userRouter = require("./routes/userRouter");
 
 // const app = express()
 // app.use(cors({
@@ -30,6 +31,8 @@ app.get("/", (request, response) => {
 
 //api endpoints
 app.use("/api", router);
+// Routes configurations
+app.use("/api/v1/user", userRouter);
 
 connectDB().then(() => {
   server.listen(PORT, () => {

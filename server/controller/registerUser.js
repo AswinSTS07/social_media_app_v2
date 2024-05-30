@@ -3,10 +3,10 @@ const bcryptjs = require("bcryptjs");
 
 async function registerUser(request, response) {
   try {
-    const { name, email, password, profile_pic } = request.body;
-    console.log("req.body----------", request.body);
+    const { username, email, password } = request.body;
+    console.log("heyyyyyyyyy", request.body);
     const checkEmail = await UserModel.findOne({ email }); //{ name,email}  // null
-
+    console.log("checkEmail--------------", checkEmail);
     if (checkEmail) {
       return response.status(400).json({
         message: "Already user exits",
@@ -19,11 +19,12 @@ async function registerUser(request, response) {
     const hashpassword = await bcryptjs.hash(password, salt);
 
     const payload = {
-      name,
+      username,
       email,
-      profile_pic,
+
       password: hashpassword,
     };
+    console.log("payload---------------", payload);
 
     const user = new UserModel(payload);
     const userSave = await user.save();
