@@ -106,7 +106,7 @@ module.exports = {
   },
   checkFollowed: (fromId, toId) => {
     return new Promise(async (resolve, reject) => {
-      User.findOne({ _id: fromId }).then(async (fromUser) => {
+      UserModel.findOne({ _id: fromId }).then(async (fromUser) => {
         let followingCount = fromUser?.following;
 
         if (followingCount == 0) {

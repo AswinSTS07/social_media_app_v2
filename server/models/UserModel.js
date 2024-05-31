@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema(
       required: [true, "provide email"],
       unique: true,
     },
+    bio: {
+      type: String,
+      required: [false],
+    },
     password: {
       type: String,
       required: [true, "provide password"],

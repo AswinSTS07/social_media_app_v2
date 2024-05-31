@@ -214,4 +214,9 @@ userRouter.get("/recommended-users/:id", async (req, res) => {
   });
 });
 
+userRouter.get("/my-post/:id", async (req, res) => {
+  let data = await Post.find({ userId: req.params.id });
+  res.send(data);
+});
+
 module.exports = userRouter;

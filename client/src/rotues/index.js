@@ -10,6 +10,9 @@ import Forgotpassword from "../pages/Forgotpassword";
 import HomeScreen from "../Screens/HomeScreen/HomeScreen";
 import RegisterScreen from "../Screens/RegisterScreen/RegisterScreen";
 import LoginScreen from "../Screens/LoginScreen/LoginScreen";
+import UserProfile from "../Screens/UserProfile/UserProfile";
+import ProfileScreen from "../Screens/ProfileScreen/ProfileScreen";
+import EditProfile from "../Screens/EditProfile/EditProfile";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +64,36 @@ const router = createBrowserRouter([
           {
             path: ":userId",
             element: <MessagePage />,
+          },
+        ],
+      },
+      {
+        path: "/user",
+        element: <UserProfile />,
+        children: [
+          {
+            path: ":id",
+            element: <UserProfile />,
+          },
+        ],
+      },
+      {
+        path: "/my-profile",
+        element: <ProfileScreen />,
+        children: [
+          {
+            path: ":id",
+            element: <ProfileScreen />,
+          },
+        ],
+      },
+      {
+        path: "/edit-profile",
+        element: <EditProfile />,
+        children: [
+          {
+            path: ":id",
+            element: <EditProfile />,
           },
         ],
       },

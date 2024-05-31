@@ -50,8 +50,8 @@ function UserProfile() {
       const fetchPost = async () => {
         setLoading(true);
 
-        let res = await axios.get(BASE_URL + `/api/v1/user/posts/${id}`);
-        setPost(res?.data?.data);
+        let res = await axios.get(BASE_URL + `/api/v1/user/my-post/${id}`);
+        setPost(res?.data);
         setLoading(false);
       };
       fetchPost();
@@ -155,7 +155,7 @@ function UserProfile() {
                           <Post
                             user={p}
                             time="2 hrs ago"
-                            content="This is a sample post content. It's a beautiful day!"
+                            content={p?.caption}
                             image={p?.src}
                             avatar={user?.avatar}
                             name={user?.name}

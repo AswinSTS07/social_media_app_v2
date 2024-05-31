@@ -50,7 +50,7 @@ function HomeScreen() {
 
   return (
     <div className="row mt-5">
-      <div className="col-md-3">
+      <div className="col-md-3 p-3">
         <div className="container-fluid card">
           <LeftCard />
         </div>
@@ -74,9 +74,9 @@ function HomeScreen() {
           <>No post available</>
         )}
       </div>
-      <div className="col-md-3">
+      <div className="col-md-3 p-2">
         <h4 className="medium">Recommended for you</h4>
-        <div className="container-fluid card">
+        <div className="container-fluid card ">
           {recommendedUsers?.length == 0 ? (
             <>No recommended users</>
           ) : (

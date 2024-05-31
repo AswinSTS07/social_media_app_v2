@@ -110,8 +110,11 @@ function ProfileScreen() {
       const fetchPost = async () => {
         setLoading(true);
         let user = JSON.parse(localStorage.getItem("userInfo"));
-        let res = await axios.get(BASE_URL + `/api/v1/user/posts/${user?.id}`);
-        setPost(res?.data?.data);
+        let res = await axios.get(
+          BASE_URL + `/api/v1/user/my-post/${user?.id}`
+        );
+
+        setPost(res?.data);
         setLoading(false);
       };
       fetchPost();
@@ -135,6 +138,7 @@ function ProfileScreen() {
     <div className="container mt-2">
       <div className="row">
         <div>
+          {console.log("USER----------", user ? user : "no user")}
           <div className="cover-photo">
             <img src={user?.coverImage} alt="Cover" />
           </div>
