@@ -4,6 +4,7 @@ const { successResponse, errorResponse } = require("../constants");
 const Post = require("../models/postModel");
 const Follow = require("../models/followingModel");
 const UserModel = require("../models/UserModel");
+const { io } = require("../socket");
 const JWT_SECRET = process.env.JWT_SECRET || "something_secret";
 
 module.exports = {
@@ -125,7 +126,7 @@ module.exports = {
   },
   sendFollowRequest: (fromId, toId) => {
     return new Promise((resolve, reject) => {
-      User.findOne({ _id: fromId }).then(async (fromUser) => {
+      UserModel.findOne({ _id: fromId }).then(async (fromUser) => {
         let followingCount = fromUser?.following;
         let private = false;
         let toUser = await UserModel.findOne({ _id: toId }, { private: 1 });
@@ -133,6 +134,11 @@ module.exports = {
 
         if (private) {
           // Send notification to user
+          io.to(toId).emit("notification", {
+            message: `${fromUser.username} has sent you a follow request.`,
+            fromUserId: fromId,
+          });
+          resolve({ success: true, private: true });
         } else {
           let userFollowDetails = await Follow.findOne({ userId: fromId });
 
@@ -146,6 +152,10 @@ module.exports = {
               { _id: fromId },
               { $set: { following: followingCount + 1 } }
             );
+            io.to(toId).emit("notification", {
+              message: `${fromUser.username} has started following you.`,
+              fromUserId: fromId,
+            });
             resolve(true);
           } else {
             const result = await Follow.updateOne(
@@ -154,6 +164,10 @@ module.exports = {
               { new: true, useFindAndModify: false }
             );
             if (result?.modifiedCount == 1) {
+              io.to(toId).emit("notification", {
+                message: `${fromUser.username} has started following you.`,
+                fromUserId: fromId,
+              });
               resolve(true);
             }
           }
@@ -170,7 +184,10 @@ module.exports = {
         { $pull: { following: toId } },
         { new: true, useFindAndModify: false }
       );
-      await User.updateOne({ _id: fromId }, { following: followingCount - 1 });
+      await UserModel.updateOne(
+        { _id: fromId },
+        { following: followingCount - 1 }
+      );
       resolve(true);
     });
   },
