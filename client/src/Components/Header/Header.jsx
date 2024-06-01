@@ -17,6 +17,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import io from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { setSocketConnection } from "../../redux/userSlice";
+import logo from "../../assets/logo.png";
 
 const User = ({ user }) => (
   <div className="user-item">
@@ -102,7 +103,7 @@ function Header({ uid }) {
       <nav className="navbar bg-body-tertiary">
         <div className="container-fluid">
           <a className="navbar-brand" href="/">
-            Crowdly
+            <img src={logo} style={{height:'auto',width:'120px'}} />
           </a>
           <form className="d-flex mx-auto position-relative" role="search">
             <TextField

@@ -21,12 +21,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "register",
-        element: (
-          <AuthLayouts>
-            {/* <RegisterPage /> */}
-            <RegisterScreen />
-          </AuthLayouts>
-        ),
+        element: <RegisterScreen />,
       },
       {
         path: "email",
@@ -38,20 +33,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/login",
-        element: (
-          <AuthLayouts>
-            {/* <CheckPasswordPage /> */}
-            <LoginScreen />
-          </AuthLayouts>
-        ),
+        element: <LoginScreen />,
       },
       {
         path: "forgot-password",
-        element: (
-          <AuthLayouts>
-            <Forgotpassword />
-          </AuthLayouts>
-        ),
+        element: <Forgotpassword />,
       },
       {
         path: "",

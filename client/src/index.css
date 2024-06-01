@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
 
 *{
@@ -44,10 +45,13 @@ a{
   text-decoration: none;
 }
 .login-text{
-  font-family: sans-serif;
+  font-family:'Inter';
   font-weight: 600;
-  color: #34495E;
+  color: #004b97;
   font-size: 40px;
+}
+.login_input_text{
+  font-family: 'Inter';
 }
 .center{
   display: flex;

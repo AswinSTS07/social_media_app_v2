@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setToken, setUser } from "../../redux/userSlice";
+import logo from "../../assets/logo.png";
 
 function LoginScreen() {
   const [loading, setLoading] = useState(false);
@@ -55,7 +56,7 @@ function LoginScreen() {
         if (res && res.status == 200) {
           Swal.fire({
             title: "Success!",
-            text: "Login successfull!",
+            text: "Login successful!",
             icon: "success",
           });
           dispatch(setToken(res?.data?.token));
@@ -73,20 +74,24 @@ function LoginScreen() {
           );
           window.location.href = "/";
         }
-      } catch (error) {}
+      } catch (error) {
+        setLoading(false);
+        Swal.fire({
+          title: "Error!",
+          text: "Login failed! Please try again.",
+          icon: "error",
+        });
+      }
     }
   };
 
   return (
     <div className="row">
-      <div className="col-md-6 bg-light">
-        <div>
-          <img
-            src="https://cdni.iconscout.com/illustration/premium/thumb/social-media-network-6992133-5737579.png?f=webp"
-            className="w-100"
-            alt="Social Media"
-          />
-        </div>
+      <div
+        className="col-md-6 bg-light d-flex justify-content-center align-items-center"
+        style={{ height: "100vh" }}
+      >
+        <img src={logo} className="w-50" alt="Social Media" />
       </div>
       <div className="col-md-6 mt-5">
         <div className="center mt-5">
@@ -96,11 +101,16 @@ function LoginScreen() {
           <form onSubmit={handleSubmit}>
             <div style={{ marginLeft: 40, marginTop: 40 }}>
               <div className="form-group">
-                <label>Email</label>
+                <label
+                  style={{ fontSize: "18px" }}
+                  className="login_input_text"
+                >
+                  Email
+                </label>
                 <input
                   type="text"
                   name="email"
-                  className={`w-100 p-2 ${errors.email ? "is-invalid" : ""}`}
+                  className={`p-2 ${errors.email ? "is-invalid" : ""}`}
                   placeholder="Email / username"
                   value={formData.email}
                   onChange={handleChange}
@@ -110,7 +120,12 @@ function LoginScreen() {
                 )}
               </div>
               <div className="form-group mt-5">
-                <label>Password</label>
+                <label
+                  style={{ fontSize: "18px" }}
+                  className="login_input_text"
+                >
+                  Password
+                </label>
                 <input
                   type="password"
                   name="password"
