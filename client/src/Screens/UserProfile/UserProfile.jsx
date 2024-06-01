@@ -5,7 +5,7 @@ import "react-tabs/style/react-tabs.css";
 import RightCard from "../../Components/RightCard/RightCard";
 import axios from "axios";
 import { BASE_URL } from "../../constant";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Post from "../../Components/Post/Post";
 
 function UserProfile() {
@@ -15,6 +15,34 @@ function UserProfile() {
   const [user, setUser] = useState(null);
   const [followed, setFollowed] = useState(false);
   const [processing, setProcessing] = useState(false);
+
+  const [recommendedUsers, setRecommendedUsers] = useState([]);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 5;
+
+  useEffect(() => {
+    const fetchRecommendUsers = async () => {
+      try {
+        setLoading(true);
+        let user = JSON.parse(localStorage.getItem("userInfo"));
+        let res = await axios.get(
+          `${BASE_URL}/api/v1/user/recommended-users/${id}`,
+          {
+            params: { page, limit },
+          }
+        );
+        setRecommendedUsers(res?.data?.data?.users || []);
+        setTotalPages(res?.data?.data?.totalPages || 1);
+        setLoading(false);
+      } catch (error) {
+        console.log("Error while fetching post: ", error);
+        setLoading(false);
+      }
+    };
+    fetchRecommendUsers();
+  }, [page]);
 
   useEffect(() => {
     const checkFollowed = async () => {
@@ -186,9 +214,19 @@ function UserProfile() {
               </TabPanel>
             </Tabs>
           </div>
-          <div className="col-md-4 mt-4 card">
+          <div className="col-md-4 mt-4 card p-4">
             <h4 className="medium-text mt-3">People your may know</h4>
-            <RightCard />
+            <div className="mt-3">
+              {recommendedUsers?.length == 0 ? (
+                <>No recommended users</>
+              ) : (
+                recommendedUsers?.map((users, index) => (
+                  <Link to={`/user/${users?._id}`}>
+                    <RightCard data={users} />
+                  </Link>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>

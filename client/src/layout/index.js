@@ -19,6 +19,7 @@ import axios from "axios";
 import GroupIcon from "@mui/icons-material/Group";
 import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const User = ({ user }) => (
   <div className="user-item">
@@ -62,9 +63,22 @@ const AuthLayouts = ({ children }) => {
   };
 
   const handleLogoutClick = () => {
-    // Add your logout logic here
-    console.log("Logged out");
-    handleMenuClose2();
+    Swal.fire({
+      title: "Do you want logout ?",
+      showDenyButton: true,
+
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "/";
+        localStorage.removeItem("token");
+        localStorage.removeItem("userInfo");
+        handleMenuClose2();
+      } else if (result.isDenied) {
+        console.log("logout denied");
+        handleMenuClose2();
+      }
+    });
   };
 
   const searchUser = async () => {
@@ -146,7 +160,7 @@ const AuthLayouts = ({ children }) => {
     <>
       <nav className="navbar" style={{ backgroundColor: "white" }}>
         <div className="container-fluid">
-          <a className="navbar-brand" href="/">
+          <a className="navbar-brand" href="/home">
             <img src={logo} style={{ height: "auto", width: "120px" }} />
           </a>
           <form className="d-flex mx-auto position-relative" role="search">

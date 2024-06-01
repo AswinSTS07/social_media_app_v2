@@ -9,7 +9,7 @@ import { BASE_URL } from "../../constant";
 import Swal from "sweetalert2";
 import LinearWithValueLabel from "../../Components/LinearProgressWithLabel/LinearProgressWithLabel";
 import EditIcon from "@mui/icons-material/Edit";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const user = {
@@ -47,6 +47,34 @@ function ProfileScreen() {
   const [following, setFollowing] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [hasMore, setHasMore] = useState(true);
+  const [recommendedUsers, setRecommendedUsers] = useState([]);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 5;
+
+  useEffect(() => {
+    const fetchRecommendUsers = async () => {
+      try {
+        setLoading(true);
+        let user = JSON.parse(localStorage.getItem("userInfo"));
+        let res = await axios.get(
+          `${BASE_URL}/api/v1/user/recommended-users/${user?.id}`,
+          {
+            params: { page, limit },
+          }
+        );
+        setRecommendedUsers(res?.data?.data?.users || []);
+        setTotalPages(res?.data?.data?.totalPages || 1);
+        setLoading(false);
+      } catch (error) {
+        console.log("Error while fetching post: ", error);
+        setLoading(false);
+      }
+    };
+    fetchRecommendUsers();
+  }, [page]);
+
   const handleCoverImageChange = (e) => {
     const file = e.target.files[0];
     previewFile(file);
@@ -336,9 +364,17 @@ function ProfileScreen() {
             </TabPanel>
           </Tabs>
         </div>
-        <div className="col-md-4 mt-4 card">
+        <div className="col-md-4 mt-5 card">
           <h4 className="medium-text mt-3">People your may know</h4>
-          <RightCard />
+          {recommendedUsers?.length == 0 ? (
+            <>No recommended users</>
+          ) : (
+            recommendedUsers?.map((users, index) => (
+              <Link to={`/user/${users?._id}`}>
+                <RightCard data={users} />
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </div>

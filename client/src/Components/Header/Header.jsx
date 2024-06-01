@@ -102,7 +102,7 @@ function Header({ uid }) {
     <div>
       <nav className="navbar" style={{ backgroundColor: "white" }}>
         <div className="container-fluid">
-          <a className="navbar-brand" href="/">
+          <a className="navbar-brand" href="/home">
             <img src={logo} style={{ height: "auto", width: "120px" }} />
           </a>
           <form className="d-flex mx-auto position-relative" role="search">

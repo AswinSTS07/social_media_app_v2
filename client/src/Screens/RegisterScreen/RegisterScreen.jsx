@@ -67,7 +67,7 @@ function RegisterScreen() {
             text: "Account created successfully!",
             icon: "success",
           }).then(() => {
-            window.location.href = "/login";
+            window.location.href = "/";
           });
         }
       } catch (error) {}
@@ -151,8 +151,8 @@ function RegisterScreen() {
                 className="mt-3"
                 style={{ display: "flex", flexDirection: "column" }}
               >
-                <a href="/forgot-password">Forgot password</a>
-                <a href="/login">Already have an Account?</a>
+                {/* <a href="/forgot-password">Forgot password</a> */}
+                <a href="/">Already have an Account?</a>
               </div>
             </div>
           </form>

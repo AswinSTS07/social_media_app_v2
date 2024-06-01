@@ -7,8 +7,10 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setToken, setUser } from "../../redux/userSlice";
 import logo from "../../assets/logo.png";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 function LoginScreen() {
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -71,7 +73,7 @@ function LoginScreen() {
                 private: res?.data?.data?.private,
               })
             );
-            window.location.href = "/";
+            window.location.href = "/home";
           });
         }
       } catch (error) {
@@ -83,6 +85,9 @@ function LoginScreen() {
         });
       }
     }
+  };
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
   };
   return (
     <div className="login-container">
@@ -110,13 +115,27 @@ function LoginScreen() {
             </div>
             <div className="form-group">
               <label htmlFor="password">Password:</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-              />
+              <div style={{ position: "relative" }}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <span
+                  onClick={togglePasswordVisibility}
+                  style={{
+                    position: "absolute",
+                    right: "0px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    cursor: "pointer",
+                  }}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
               {errors.password && (
                 <div style={{ color: "red", fontSize: "12px" }}>
                   {errors.password}
@@ -132,7 +151,7 @@ function LoginScreen() {
               className="mt-3"
               style={{ display: "flex", flexDirection: "column" }}
             >
-              <a href="/forgot-password">Forgot password</a>
+              {/* <a href="/forgot-password">Forgot password</a> */}
               <a href="/register">Create new Account ?</a>
             </div>
           </form>

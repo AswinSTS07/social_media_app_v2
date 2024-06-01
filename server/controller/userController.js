@@ -75,10 +75,10 @@ module.exports = {
       if (user) {
         let user_interest = user?.interests;
         if (user_interest.length == 0) {
-          post = await Post.find();
+          post = await Post.find().sort({ createdAt: -1 });
         } else {
           const query = { category: { $in: user_interest } };
-          post = await Post.find(query);
+          post = await Post.find(query).sort({ createdAt: -1 });
         }
         successResponse.data = post;
         resolve(successResponse);

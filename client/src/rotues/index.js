@@ -14,6 +14,7 @@ import UserProfile from "../Screens/UserProfile/UserProfile";
 import ProfileScreen from "../Screens/ProfileScreen/ProfileScreen";
 import EditProfile from "../Screens/EditProfile/EditProfile";
 import AllUsersScreen from "../Screens/AllUsersScreen/AllUsersScreen";
+import SettingsPage from "../Screens/SettingsPage/SettingsPage";
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/login",
+        path: "/",
         element: <LoginScreen />,
       },
       {
@@ -41,10 +42,18 @@ const router = createBrowserRouter([
         element: <Forgotpassword />,
       },
       {
-        path: "",
+        path: "/home",
         element: (
           <AuthLayouts>
             <HomeScreen />
+          </AuthLayouts>
+        ),
+      },
+      {
+        path: "/settings",
+        element: (
+          <AuthLayouts>
+            <SettingsPage />
           </AuthLayouts>
         ),
       },

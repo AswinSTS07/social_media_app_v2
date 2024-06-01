@@ -22,8 +22,8 @@ export default function LeftCard() {
         <List>
           <ListItem>
             <ListItemButton
-              selected={location.pathname === "/"}
-              onClick={() => navigate("/")}
+              selected={location.pathname === "/home"}
+              onClick={() => navigate("/home")}
             >
               <ListItemIcon>
                 <HomeIcon color="primary" />
@@ -42,17 +42,17 @@ export default function LeftCard() {
               <ListItemText primary="Messages" />
             </ListItemButton>
           </ListItem>
-          <ListItem>
+          {/* <ListItem>
             <ListItemButton
-              selected={location.pathname === "/chat"}
-              onClick={() => navigate("/chat")}
+              selected={location.pathname === "/settings"}
+              onClick={() => navigate("/settings")}
             >
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
               <ListItemText primary="Settings" />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
         </List>
       </nav>
     </Box>
