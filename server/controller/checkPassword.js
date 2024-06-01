@@ -5,10 +5,9 @@ const jwt = require("jsonwebtoken");
 async function checkPassword(request, response) {
   try {
     const { password, email } = request.body;
-    console.log("REQ BODY============", request.body);
 
     const user = await UserModel.findOne({ email });
-    console.log("user----------", user);
+
     const verifyPassword = await bcryptjs.compare(password, user.password);
 
     if (!verifyPassword) {
@@ -24,7 +23,7 @@ async function checkPassword(request, response) {
     };
     const token = await jwt.sign(
       tokenData,
-      process.env.JWT_TOKEN || "something_secret",
+      process.env.JWT_SECREAT_KEY || "something_secret",
       {
         expiresIn: "30d",
       }
@@ -35,12 +34,19 @@ async function checkPassword(request, response) {
       secure: true,
     };
 
-    return response.cookie("token", token, cookieOptions).status(200).json({
+    return response.status(200).json({
       message: "Login successfully",
       token: token,
       success: true,
       data: user,
     });
+
+    // return response.cookie("token", token, cookieOptions).status(200).json({
+    //   message: "Login successfully",
+    //   token: token,
+    //   success: true,
+    //   data: user,
+    // });
   } catch (error) {
     return response.status(500).json({
       message: error.message || error,

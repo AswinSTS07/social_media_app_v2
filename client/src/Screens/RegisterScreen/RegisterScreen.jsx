@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { BASE_URL } from "../../constant";
 import Swal from "sweetalert2";
+import logo from "../../assets/logo.png";
+// import './RegisterScreen.css'
 
 function RegisterScreen() {
   const [loading, setLoading] = useState(false);
@@ -64,30 +66,22 @@ function RegisterScreen() {
             title: "Success!",
             text: "Account created successfully!",
             icon: "success",
+          }).then(() => {
+            window.location.href = "/login";
           });
-
-          window.location.href = "/login";
         }
       } catch (error) {}
     }
   };
 
   return (
-    <div className="row">
-      <div className="col-md-6 bg-light">
-        <div>
-          <img
-            src="https://cdni.iconscout.com/illustration/premium/thumb/social-media-network-6992133-5737579.png?f=webp"
-            className="w-100"
-            alt="Social Media"
-          />
-        </div>
+    <div className="login-container">
+      <div className="login-left">
+        <img src={logo} className="w-50" alt="Social Media" />
       </div>
-      <div className="col-md-6 mt-5">
-        <div className="center mt-3">
-          <h2 className="login-text mt-5">Create new account</h2>
-        </div>
-        <div className="container p-5">
+      <div className="login-right">
+        <div className="login-box">
+          <h2>Create new Account</h2>
           <form onSubmit={handleSubmit}>
             <div style={{ marginLeft: 40, marginTop: 40 }}>
               <div className="form-group">
@@ -150,7 +144,7 @@ function RegisterScreen() {
                   </div>
                 )}
               </div>
-              <button type="submit" className="btn btn-primary mt-4 w-100 p-2">
+              <button type="submit" className="btn btn-primary mt-4 w-100 p-2 loginBtn">
                 {loading ? <>Please wait...</> : <>Register</>}
               </button>
               <div

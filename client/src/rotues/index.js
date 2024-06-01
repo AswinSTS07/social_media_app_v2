@@ -41,11 +41,19 @@ const router = createBrowserRouter([
       },
       {
         path: "",
-        element: <HomeScreen />,
+        element: (
+          <AuthLayouts>
+            <HomeScreen />
+          </AuthLayouts>
+        ),
       },
       {
         path: "/chat",
-        element: <Home />,
+        element: (
+          <AuthLayouts>
+            <Home />
+          </AuthLayouts>
+        ),
         children: [
           {
             path: ":userId",
@@ -55,31 +63,58 @@ const router = createBrowserRouter([
       },
       {
         path: "/user",
-        element: <UserProfile />,
+        element: (
+          <AuthLayouts>
+            <UserProfile />
+          </AuthLayouts>
+        ),
         children: [
           {
             path: ":id",
-            element: <UserProfile />,
+            element: (
+              <AuthLayouts>
+                {" "}
+                <UserProfile />
+              </AuthLayouts>
+            ),
           },
         ],
       },
       {
         path: "/my-profile",
-        element: <ProfileScreen />,
+        element: (
+          <AuthLayouts>
+            <ProfileScreen />
+          </AuthLayouts>
+        ),
         children: [
           {
             path: ":id",
-            element: <ProfileScreen />,
+            element: (
+              <AuthLayouts>
+                {" "}
+                <ProfileScreen />
+              </AuthLayouts>
+            ),
           },
         ],
       },
       {
         path: "/edit-profile",
-        element: <EditProfile />,
+        element: (
+          <AuthLayouts>
+            <EditProfile />
+          </AuthLayouts>
+        ),
         children: [
           {
             path: ":id",
-            element: <EditProfile />,
+            element: (
+              <AuthLayouts>
+                {" "}
+                <EditProfile />
+              </AuthLayouts>
+            ),
           },
         ],
       },

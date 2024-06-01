@@ -5,6 +5,9 @@ import Post from "../../Components/Post/Post";
 import axios from "axios";
 import { BASE_URL } from "../../constant";
 import { Link } from "react-router-dom";
+import Skeleton from "../../Components/Skeleton/Skeleton";
+import Skeleton_Loader from "../../Components/Skeleton/Skeleton";
+import AlignItemsList from "../../Components/Following/Following";
 
 const user = {
   name: "John Doe",
@@ -22,8 +25,8 @@ function HomeScreen() {
         setLoading(true);
         let user = JSON.parse(localStorage.getItem("userInfo"));
         let res = await axios.get(BASE_URL + `/api/v1/user/posts/${user?.id}`);
-        setPost(res?.data?.data);
         setLoading(false);
+        setPost(res?.data?.data);
       };
       fetchPost();
     } catch (error) {
@@ -50,14 +53,22 @@ function HomeScreen() {
 
   return (
     <div className="row mt-5">
-      <div className="col-md-3 p-3">
+      <div className="col-md-3 p-4">
         <div className="container-fluid card">
           <LeftCard />
+        </div>
+        <div className="container-fluid card mt-3">
+          <div className="mt-2">
+            <h4>Following (0)</h4>
+            <AlignItemsList />
+          </div>
         </div>
       </div>
       <div className="col-md-6 scrollable-column">
         {loading ? (
-          <>Loading....</>
+          <>
+            <Skeleton_Loader />
+          </>
         ) : post.length > 0 ? (
           post.map((p, index) => (
             <Post
@@ -74,9 +85,9 @@ function HomeScreen() {
           <>No post available</>
         )}
       </div>
-      <div className="col-md-3 p-2">
+      <div className="col-md-3 p-4">
         <h4 className="medium">Recommended for you</h4>
-        <div className="container-fluid card ">
+        <div className="card mt-2">
           {recommendedUsers?.length == 0 ? (
             <>No recommended users</>
           ) : (

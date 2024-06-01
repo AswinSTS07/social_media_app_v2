@@ -20,7 +20,7 @@ function App() {
   }, []);
   return (
     <>
-      <Header uid={uid} />
+      {/* <Header uid={uid} /> */}
       <Toaster />
       <main>
         <Outlet />

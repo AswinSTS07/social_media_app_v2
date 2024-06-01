@@ -8,41 +8,49 @@ import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import InboxIcon from "@mui/icons-material/Inbox";
 import DraftsIcon from "@mui/icons-material/Drafts";
+import HomeIcon from "@mui/icons-material/Home";
+import { useLocation, useNavigate } from "react-router-dom";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export default function LeftCard() {
+  const location = useLocation();
+  const navigate = useNavigate();
   return (
     <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
       <nav aria-label="main mailbox folders">
         <List>
-          <ListItem disablePadding>
-            <ListItemButton>
+          <ListItem>
+            <ListItemButton
+              selected={location.pathname === "/"}
+              onClick={() => navigate("/")}
+            >
               <ListItemIcon>
-                <InboxIcon />
+                <HomeIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Inbox" />
+              <ListItemText primary="Home" />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton>
+          <ListItem>
+            <ListItemButton
+              selected={location.pathname === "/chat"}
+              onClick={() => navigate("/chat")}
+            >
               <ListItemIcon>
-                <DraftsIcon />
+                <ChatBubbleIcon />
               </ListItemIcon>
-              <ListItemText primary="Drafts" />
+              <ListItemText primary="Messages" />
             </ListItemButton>
           </ListItem>
-        </List>
-      </nav>
-      <Divider />
-      <nav aria-label="secondary mailbox folders">
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary="Trash" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
-              <ListItemText primary="Spam" />
+          <ListItem>
+            <ListItemButton
+              selected={location.pathname === "/chat"}
+              onClick={() => navigate("/chat")}
+            >
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Settings" />
             </ListItemButton>
           </ListItem>
         </List>

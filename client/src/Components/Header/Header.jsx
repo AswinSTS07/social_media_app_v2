@@ -100,10 +100,10 @@ function Header({ uid }) {
 
   return (
     <div>
-      <nav className="navbar bg-body-tertiary">
+      <nav className="navbar" style={{ backgroundColor: "white" }}>
         <div className="container-fluid">
           <a className="navbar-brand" href="/">
-            <img src={logo} style={{height:'auto',width:'120px'}} />
+            <img src={logo} style={{ height: "auto", width: "120px" }} />
           </a>
           <form className="d-flex mx-auto position-relative" role="search">
             <TextField

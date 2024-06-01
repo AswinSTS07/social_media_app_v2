@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setToken, setUser } from "../../redux/userSlice";
 import logo from "../../assets/logo.png";
-
 function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -58,21 +57,22 @@ function LoginScreen() {
             title: "Success!",
             text: "Login successful!",
             icon: "success",
+          }).then(() => {
+            dispatch(setToken(res?.data?.token));
+            dispatch(setUser(res?.data?.data));
+            localStorage.setItem("token", res?.data?.token);
+            localStorage.setItem(
+              "userInfo",
+              JSON.stringify({
+                username: res?.data?.data?.username,
+                id: res?.data?.data?._id,
+                profile: res?.data?.data?.profileImage,
+                coverImage: res?.data?.data?.coverImage,
+                private: res?.data?.data?.private,
+              })
+            );
+            window.location.href = "/";
           });
-          dispatch(setToken(res?.data?.token));
-          dispatch(setUser(res?.data?.data));
-          localStorage.setItem("token", res?.data?.token);
-          localStorage.setItem(
-            "userInfo",
-            JSON.stringify({
-              username: res?.data?.data?.username,
-              id: res?.data?.data?._id,
-              profile: res?.data?.data?.profileImage,
-              coverImage: res?.data?.data?.coverImage,
-              private: res?.data?.data?.private,
-            })
-          );
-          window.location.href = "/";
         }
       } catch (error) {
         setLoading(false);
@@ -84,74 +84,56 @@ function LoginScreen() {
       }
     }
   };
-
   return (
-    <div className="row">
-      <div
-        className="col-md-6 bg-light d-flex justify-content-center align-items-center"
-        style={{ height: "100vh" }}
-      >
+    <div className="login-container">
+      <div className="login-left">
         <img src={logo} className="w-50" alt="Social Media" />
       </div>
-      <div className="col-md-6 mt-5">
-        <div className="center mt-5">
-          <h2 className="login-text mt-5">Sign In to your account</h2>
-        </div>
-        <div className="container p-5">
+      <div className="login-right">
+        <div className="login-box">
+          <h2>Sign In</h2>
           <form onSubmit={handleSubmit}>
-            <div style={{ marginLeft: 40, marginTop: 40 }}>
-              <div className="form-group">
-                <label
-                  style={{ fontSize: "18px" }}
-                  className="login_input_text"
-                >
-                  Email
-                </label>
-                <input
-                  type="text"
-                  name="email"
-                  className={`p-2 ${errors.email ? "is-invalid" : ""}`}
-                  placeholder="Email / username"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {errors.email && (
-                  <div className="invalid-feedback">{errors.email}</div>
-                )}
-              </div>
-              <div className="form-group mt-5">
-                <label
-                  style={{ fontSize: "18px" }}
-                  className="login_input_text"
-                >
-                  Password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  className={`w-100 p-2 ${errors.password ? "is-invalid" : ""}`}
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                {errors.password && (
-                  <div className="invalid-feedback">{errors.password}</div>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="btn btn-primary mt-4 w-100 p-2"
-                disabled={loading}
-              >
-                {loading ? <>Please wait...</> : <>Login</>}
-              </button>
-              <div
-                className="mt-3"
-                style={{ display: "flex", flexDirection: "column" }}
-              >
-                <a href="/forgot-password">Forgot password</a>
-                <a href="/register">Create new Account ?</a>
-              </div>
+            <div className="form-group">
+              <label htmlFor="email">Email:</label>
+              <input
+                type="text"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              {errors.email && (
+                <div style={{ color: "red", fontSize: "12px" }}>
+                  {errors.email}
+                </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              {errors.password && (
+                <div style={{ color: "red", fontSize: "12px" }}>
+                  {errors.password}
+                </div>
+              )}
+            </div>
+
+            <button type="submit" disabled={loading} className="loginBtn">
+              {loading ? <>Please wait...</> : <>Login</>}
+            </button>
+
+            <div
+              className="mt-3"
+              style={{ display: "flex", flexDirection: "column" }}
+            >
+              <a href="/forgot-password">Forgot password</a>
+              <a href="/register">Create new Account ?</a>
             </div>
           </form>
         </div>
