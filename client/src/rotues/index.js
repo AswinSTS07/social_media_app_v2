@@ -13,6 +13,7 @@ import LoginScreen from "../Screens/LoginScreen/LoginScreen";
 import UserProfile from "../Screens/UserProfile/UserProfile";
 import ProfileScreen from "../Screens/ProfileScreen/ProfileScreen";
 import EditProfile from "../Screens/EditProfile/EditProfile";
+import AllUsersScreen from "../Screens/AllUsersScreen/AllUsersScreen";
 
 const router = createBrowserRouter([
   {
@@ -113,6 +114,25 @@ const router = createBrowserRouter([
               <AuthLayouts>
                 {" "}
                 <EditProfile />
+              </AuthLayouts>
+            ),
+          },
+        ],
+      },
+      {
+        path: "/all-users",
+        element: (
+          <AuthLayouts>
+            <AllUsersScreen />
+          </AuthLayouts>
+        ),
+        children: [
+          {
+            path: ":id",
+            element: (
+              <AuthLayouts>
+                {" "}
+                <AllUsersScreen />
               </AuthLayouts>
             ),
           },

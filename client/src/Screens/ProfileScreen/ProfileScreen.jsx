@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import LinearWithValueLabel from "../../Components/LinearProgressWithLabel/LinearProgressWithLabel";
 import EditIcon from "@mui/icons-material/Edit";
 import { useParams } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const user = {
   name: "John Doe",
@@ -44,7 +45,8 @@ function ProfileScreen() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
   const [following, setFollowing] = useState([]);
-
+  const [followers, setFollowers] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
   const handleCoverImageChange = (e) => {
     const file = e.target.files[0];
     previewFile(file);
@@ -133,6 +135,35 @@ function ProfileScreen() {
     };
     fetchFollowing();
   }, []);
+
+  useEffect(() => {
+    const fetchFollowers = async () => {
+      let res = await axios.get(BASE_URL + `/api/v1/user/followers/${id}`);
+
+      if (res && res.data) {
+        setFollowers(res?.data?.data);
+      }
+    };
+    fetchFollowers();
+  }, []);
+
+  const fetchMoreFollowing = async () => {
+    try {
+      const res = await axios.get(
+        BASE_URL + `/api/v1/user/following/${id}?skip=${following.length}`
+      );
+
+      if (res && res.data) {
+        if (res.data.data.length === 0) {
+          setHasMore(false);
+        } else {
+          setFollowing((prevFollowing) => [...prevFollowing, ...res.data.data]);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching more following:", error);
+    }
+  };
 
   return (
     <div className="container mt-2">
@@ -274,13 +305,34 @@ function ProfileScreen() {
                 </div>
               </div>
             </TabPanel>
-            <TabPanel>followers</TabPanel>
+            <TabPanel>
+              {followers?.length > 0 ? (
+                followers.map((fol, index) => <RightCard data={fol} />)
+              ) : (
+                <p>No following </p>
+              )}
+            </TabPanel>
             <TabPanel>
               {following?.length > 0 ? (
                 following.map((fol, index) => <RightCard data={fol} />)
               ) : (
                 <p>No following </p>
               )}
+              {/* <InfiniteScroll
+                dataLength={following.length}
+                next={fetchMoreFollowing}
+                hasMore={hasMore}
+                loader={<h4>Loading...</h4>}
+                endMessage={<p>No more following</p>}
+              >
+                {following.length > 0 ? (
+                  following.map((fol, index) => (
+                    <RightCard key={index} data={fol} />
+                  ))
+                ) : (
+                  <p>No following</p>
+                )}
+              </InfiniteScroll> */}
             </TabPanel>
           </Tabs>
         </div>

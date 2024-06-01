@@ -18,6 +18,7 @@ function HomeScreen() {
   const [post, setPost] = useState([]);
   const [loading, setLoading] = useState(false);
   const [recommendedUsers, setRecommendedUsers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
   useEffect(() => {
     try {
@@ -35,21 +36,44 @@ function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    try {
-      const fetchRecommendUsers = async () => {
+    const fetchFollowing = async () => {
+      let user = JSON.parse(localStorage.getItem("userInfo"));
+      let res = await axios.get(
+        BASE_URL + `/api/v1/user/following/${user?.id}`
+      );
+
+      if (res && res.data) {
+        setFollowing(res?.data?.data);
+      }
+    };
+    fetchFollowing();
+  }, []);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 5;
+
+  useEffect(() => {
+    const fetchRecommendUsers = async () => {
+      try {
         setLoading(true);
         let user = JSON.parse(localStorage.getItem("userInfo"));
         let res = await axios.get(
-          BASE_URL + `/api/v1/user/recommended-users/${user?.id}`
+          `${BASE_URL}/api/v1/user/recommended-users/${user?.id}`,
+          {
+            params: { page, limit },
+          }
         );
-        setRecommendedUsers(res?.data?.data);
+        setRecommendedUsers(res?.data?.data?.users || []);
+        setTotalPages(res?.data?.data?.totalPages || 1);
         setLoading(false);
-      };
-      fetchRecommendUsers();
-    } catch (error) {
-      console.log("Error while fetching post : ", error);
-    }
-  }, []);
+      } catch (error) {
+        console.log("Error while fetching post: ", error);
+        setLoading(false);
+      }
+    };
+    fetchRecommendUsers();
+  }, [page]);
 
   return (
     <div className="row mt-5">
@@ -59,8 +83,15 @@ function HomeScreen() {
         </div>
         <div className="container-fluid card mt-3">
           <div className="mt-2">
-            <h4>Following (0)</h4>
-            <AlignItemsList />
+            <h4 style={{ fontWeight: "600" }}>
+              Following ({following?.length})
+            </h4>
+            {/* <AlignItemsList /> */}
+            {following?.length > 0 ? (
+              following.map((fol, index) => <RightCard data={fol} />)
+            ) : (
+              <p>No following </p>
+            )}
           </div>
         </div>
       </div>
@@ -91,7 +122,7 @@ function HomeScreen() {
           {recommendedUsers?.length == 0 ? (
             <>No recommended users</>
           ) : (
-            recommendedUsers.map((users, index) => (
+            recommendedUsers?.map((users, index) => (
               <Link to={`/user/${users?._id}`}>
                 <RightCard data={users} />
               </Link>

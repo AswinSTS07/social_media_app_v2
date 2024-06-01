@@ -10,6 +10,8 @@ const {
   unFollow,
   getFollowing,
   getRecommendedUsers,
+  getFollowers,
+  getNotifications,
 } = require("../controller/userController");
 const Post = require("../models/postModel");
 const { post } = require("../data");
@@ -156,6 +158,12 @@ userRouter.get("/following/:id", async (req, res) => {
   });
 });
 
+userRouter.get("/followers/:id", async (req, res) => {
+  await getFollowers(req.params.id).then((result) => {
+    res.send(result);
+  });
+});
+
 userRouter.put("/:postId/like", async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId);
@@ -209,14 +217,25 @@ userRouter.get("/:postId/comments", async (req, res) => {
 });
 
 userRouter.get("/recommended-users/:id", async (req, res) => {
-  await getRecommendedUsers(req.params.id).then((result) => {
-    res.send(result);
-  });
+  const { page = 1, limit = 10 } = req.query; // Default page 1, limit 10
+  await getRecommendedUsers(req.params.id, parseInt(page), parseInt(limit))
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
 });
 
 userRouter.get("/my-post/:id", async (req, res) => {
   let data = await Post.find({ userId: req.params.id });
   res.send(data);
+});
+
+userRouter.get("/notifications/:id", async (req, res) => {
+  await getNotifications(req.params.id).then((result) => {
+    res.send(result);
+  });
 });
 
 module.exports = userRouter;

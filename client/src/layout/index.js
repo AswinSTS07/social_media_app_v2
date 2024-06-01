@@ -18,6 +18,7 @@ import {
 import axios from "axios";
 import GroupIcon from "@mui/icons-material/Group";
 import io from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 
 const User = ({ user }) => (
   <div className="user-item">
@@ -36,6 +37,7 @@ const User = ({ user }) => (
 );
 
 const AuthLayouts = ({ children }) => {
+  const navigate = useNavigate();
   const [uid, setUid] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const dispatch = useDispatch();
@@ -44,6 +46,26 @@ const AuthLayouts = ({ children }) => {
   const [searchResult, setSearchResult] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl2, setAnchorEl2] = useState(null);
+
+  const handleMenuOpen2 = (event) => {
+    setAnchorEl2(event.currentTarget);
+  };
+
+  const handleMenuClose2 = () => {
+    setAnchorEl2(null);
+  };
+
+  const handleProfileClick = () => {
+    navigate(`/my-profile/${uid}`);
+    handleMenuClose2();
+  };
+
+  const handleLogoutClick = () => {
+    // Add your logout logic here
+    console.log("Logged out");
+    handleMenuClose2();
+  };
 
   const searchUser = async () => {
     if (!query) {
@@ -66,6 +88,17 @@ const AuthLayouts = ({ children }) => {
   useEffect(() => {
     searchUser();
   }, [query]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      let user = JSON.parse(localStorage.getItem("userInfo"));
+      let noti = await axios.get(
+        `${BASE_URL}/api/v1/user/notifications/${user?.id}`
+      );
+      setNotifications(noti?.data);
+    };
+    fetchNotifications();
+  }, []);
 
   useEffect(() => {
     const socketConnection = io(process.env.REACT_APP_BACKEND_URL, {
@@ -149,7 +182,9 @@ const AuthLayouts = ({ children }) => {
           </form>
           <div className="d-flex">
             <div className="mx-3">
-              <GroupIcon />
+              <a href={`/all-users/${uid}`}>
+                <GroupIcon />
+              </a>
             </div>
             <div className="mx-3" style={{ top: "-5px", position: "relative" }}>
               <IconButton onClick={handleNotificationClick}>
@@ -181,9 +216,18 @@ const AuthLayouts = ({ children }) => {
               </a>
             </div>
             <div className="mx-3">
-              <a href={`/my-profile/${uid}`}>
-                <AccountCircleIcon />
-              </a>
+              <AccountCircleIcon
+                onClick={handleMenuOpen2}
+                style={{ cursor: "pointer" }}
+              />
+              <Menu
+                anchorEl={anchorEl2}
+                open={Boolean(anchorEl2)}
+                onClose={handleMenuClose2}
+              >
+                <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
+                <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+              </Menu>
             </div>
           </div>
         </div>
